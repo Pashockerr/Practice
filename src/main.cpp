@@ -11,7 +11,6 @@ int main(void)
 
     engine::Scene scene(screenWidth, screenHeight, 61, "TEST");
 
-
     scene.Loop();
 
     return 0;

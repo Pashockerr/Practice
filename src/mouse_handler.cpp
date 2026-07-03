@@ -28,7 +28,7 @@ namespace engine{
             dragging_sprite_p = nullptr;
         }
 
-        if(dragging_sprite_p != nullptr){
+        if(dragging_sprite_p != nullptr && dragging_sprite_p->draggable){
             auto m_d = GetMouseDelta();
             dragging_sprite_p->position.x += m_d.x;
             dragging_sprite_p->position.y += m_d.y;

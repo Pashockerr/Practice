@@ -22,7 +22,7 @@ namespace engine
         bool draggable;
         bool visible;
         bool MouseCollides();
-        void Tick(Scene*);
+        virtual void Tick(Scene*);
     private:
         Texture2D texture;
         float scale;

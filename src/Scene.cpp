@@ -21,11 +21,11 @@ namespace engine
 
         sprites.push_front(new engine::Reciever("resources/textures/port.png", {700, 100}, 0, .25f, 0, true));
 
-        sprites.push_front(new engine::Banknote("resources/textures/50.png", {100, 100}, 0, 2, 0, true));
-        sprites.push_front(new engine::Banknote("resources/textures/100.png", {100, 100}, 0, 2, 0, true));
-        sprites.push_front(new engine::Banknote("resources/textures/500.png", {100, 100}, 0, 2, 0, true));
-        sprites.push_front(new engine::Banknote("resources/textures/1000.png", {100, 100}, 0, 2, 0, true));
-        sprites.push_front(new engine::Banknote("resources/textures/5000.png", {100, 100}, 0, 2, 0, true));
+        sprites.push_front(new engine::Banknote("resources/textures/50.png", {100, 100}, 0, 2, 0, true, 50));
+        sprites.push_front(new engine::Banknote("resources/textures/100.png", {100, 100}, 0, 2, 0, true, 100));
+        sprites.push_front(new engine::Banknote("resources/textures/500.png", {100, 100}, 0, 2, 0, true, 500));
+        sprites.push_front(new engine::Banknote("resources/textures/1000.png", {100, 100}, 0, 2, 0, true, 1000));
+        sprites.push_front(new engine::Banknote("resources/textures/5000.png", {100, 100}, 0, 2, 0, true, 5000));
     }
 
     Scene::~Scene()

@@ -43,7 +43,7 @@ namespace engine{
     }
 
     Sprite::~Sprite(){
-        //UnloadTexture(this->texture);
+        UnloadTexture(this->texture);
     }
 
     bool Sprite::MouseCollides(){

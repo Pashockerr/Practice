@@ -1,5 +1,6 @@
 #pragma once
 #include "Sprite.h"
+#include "Banknote.h"
 
 namespace engine{
     class Terminal : public Sprite{
