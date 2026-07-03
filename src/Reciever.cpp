@@ -27,7 +27,7 @@ namespace engine
             recieving_banknote->visible = false;
             recieving_banknote->draggable = false;
             recieving_banknote->layer = -1;
-            std::cout << "Recieved : " << recieving_banknote->value << std::endl;
+            values.push_front(recieving_banknote->value);
             recieving_banknote = nullptr;
         }
     }
