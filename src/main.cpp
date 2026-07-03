@@ -6,8 +6,8 @@
 
 int main(void)
 {
-    const int screenWidth = 1920;
-    const int screenHeight = 1080;
+    const int screenWidth = 800;
+    const int screenHeight = 600;
 
     engine::Scene scene(screenWidth, screenHeight, 61, "TEST");
 

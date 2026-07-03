@@ -10,7 +10,7 @@ namespace engine
     public:
         Sprite(std::string texture_name, Vector2 pos, float rot, float scale, int layer, bool draggable, bool visible);
         ~Sprite();
-        void Draw();
+        virtual void Draw();
         void ChangeTexture(std::string texture_name);
         void ChangeTexture(Texture2D texture);
         void SetScale(float scale);
@@ -23,8 +23,11 @@ namespace engine
         bool visible;
         bool MouseCollides();
         virtual void Tick(Scene*);
+
     private:
-        Texture2D texture;
         float scale;
+
+    protected:
+        Texture2D texture;
     };
 }

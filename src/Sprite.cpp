@@ -24,8 +24,9 @@ namespace engine{
     }
     
     void Sprite::ChangeTexture(Texture2D texture){
-        UnloadTexture(this->texture);
-        this->texture = texture;
+        if(this->texture.id != texture.id){
+            this->texture = texture;
+        }
     }
 
     void Sprite::SetScale(float scale){
