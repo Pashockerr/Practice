@@ -11,6 +11,16 @@ namespace engine{
         this->visible = visible;
     }
 
+    Sprite::Sprite(Texture texture, Vector2 pos, float rot, float scale, int layer, bool draggable, bool visible){
+        this->texture = texture;
+        this->position = pos;
+        this->rotation = rot;
+        this->scale = scale;
+        this->layer = layer;
+        this->draggable = draggable;
+        this->visible = visible;
+    }
+
     void Sprite::Draw(){
         if(!visible) return;
         DrawTextureEx(this->texture, this->position, this->rotation, this->scale, WHITE);

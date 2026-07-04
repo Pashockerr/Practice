@@ -13,7 +13,9 @@ namespace engine
         GASOLINE_SELECT,
         AMOUNT_SELECT,
         WAIT_MONEY,
+        WAIT_NOZZLE,
         FILLING,
+        PAUSE_FILLING,
         GIVE_CHANGE,
         PRINT_CHECK
     };
@@ -29,6 +31,7 @@ namespace engine
         float selected_litres;
         float received_money;
         float price_per_liter;
+        float total_litres;
         State state;
         Label *label;
         Reciever *reciever;
@@ -36,6 +39,7 @@ namespace engine
         Sprite *nozzle_92;
         Sprite *nozzle_95;
         std::list<Button *> keyboard;
-        void DisplayText(std::string);
+        bool AppropriateNozzleIsTaken();
+        void ComputeAndGiveChange();
     };
 }

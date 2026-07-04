@@ -7,6 +7,7 @@
 #include <iostream>
 #include "../include/raylib.h"
 #include "mouse_handler.h"
+#include "constants.h"
 
 namespace engine
 {
@@ -21,11 +22,17 @@ namespace engine
         SetTargetFPS(fps);
         this->need_reorder = true;
 
-        sprites.push_front(new engine::Banknote("resources/textures/50.png", {500, 500}, 0, 2, 2, true, 50));
-        sprites.push_front(new engine::Banknote("resources/textures/100.png", {500, 500}, 0, 2, 2, true, 100));
-        sprites.push_front(new engine::Banknote("resources/textures/500.png", {500, 500}, 0, 2, 2, true, 500));
-        sprites.push_front(new engine::Banknote("resources/textures/1000.png", {500, 500}, 0, 2, 2, true, 1000));
-        sprites.push_front(new engine::Banknote("resources/textures/5000.png", {500, 500}, 0, 2, 2, true, 5000));
+        texture_50 = LoadTexture("resources/textures/50.png");
+        texture_100 = LoadTexture("resources/textures/100.png");
+        texture_500 = LoadTexture("resources/textures/500.png");
+        texture_1000 = LoadTexture("resources/textures/1000.png");
+        texture_5000 = LoadTexture("resources/textures/5000.png");
+
+        sprites.push_front(new engine::Banknote(texture_50, constants::POS_50, 0, 2, 2, true, 50));
+        sprites.push_front(new engine::Banknote(texture_100, constants::POS_100, 0, 2, 2, true, 100));
+        sprites.push_front(new engine::Banknote(texture_500, constants::POS_500, 0, 2, 2, true, 500));
+        sprites.push_front(new engine::Banknote(texture_1000, constants::POS_1000, 0, 2, 2, true, 1000));
+        sprites.push_front(new engine::Banknote(texture_5000, constants::POS_5000, 0, 2, 2, true, 5000));
 
         sprites.push_front(new engine::Terminal("resources/textures/terminal.png", {0, 0}, 0, 1, 0, true, this));
     }

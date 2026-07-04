@@ -10,8 +10,17 @@ namespace engine{
             void Tick(Scene*);
             std::list<float> values;
             bool enabled;
+            bool IsCurrentlyRecieving();
+            void AddReturnValue(float value);
+            float PopReturnValue();
+            void ClearReturnValues();
+            void ReturnChange();
+            bool IsReturningChange();
 
         private:
             Banknote *recieving_banknote;
+            Banknote *returning_banknote;
+            std::list<float> return_values;
+            bool is_returning_change;
     };
 }

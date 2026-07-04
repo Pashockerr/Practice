@@ -19,6 +19,7 @@ namespace engine
     {
     public:
         Sprite(std::string texture_name, Vector2 pos, float rot, float scale, int layer, bool draggable, bool visible);
+        Sprite(Texture texture, Vector2 pos, float rot, float scale, int layer, bool draggable, bool visible);
         ~Sprite();
         virtual void Draw();
         void ChangeTexture(std::string texture_name);
