@@ -21,17 +21,11 @@ namespace engine
         SetTargetFPS(fps);
         this->need_reorder = true;
 
-        // sprites.push_front(new engine::Reciever("resources/textures/port.png", {700, 100}, 0, .25f, 0, true));
-
         sprites.push_front(new engine::Banknote("resources/textures/50.png", {500, 500}, 0, 2, 2, true, 50));
         sprites.push_front(new engine::Banknote("resources/textures/100.png", {500, 500}, 0, 2, 2, true, 100));
         sprites.push_front(new engine::Banknote("resources/textures/500.png", {500, 500}, 0, 2, 2, true, 500));
         sprites.push_front(new engine::Banknote("resources/textures/1000.png", {500, 500}, 0, 2, 2, true, 1000));
         sprites.push_front(new engine::Banknote("resources/textures/5000.png", {500, 500}, 0, 2, 2, true, 5000));
-
-        // sprites.push_front(new engine::Button("resources/textures/button_inactive.png",
-                                            //   "resources/textures/button_active.png",
-                                            //   {500, 200}, 0, 1, 0, true));
 
         sprites.push_front(new engine::Terminal("resources/textures/terminal.png", {0, 0}, 0, 1, 0, true, this));
     }

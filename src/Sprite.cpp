@@ -15,7 +15,7 @@ namespace engine{
         if(!visible) return;
         DrawTextureEx(this->texture, this->position, this->rotation, this->scale, WHITE);
         // Debug renderer
-        DrawRectangleLinesEx(this->GetRectangle(), 1, RED);
+        // DrawRectangleLinesEx(this->GetRectangle(), 1, RED);
     }
     
     void Sprite::ChangeTexture(std::string texture_name){
