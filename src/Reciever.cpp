@@ -12,6 +12,8 @@ namespace engine
 
     void Reciever::Tick(Scene *scene)
     {
+        if(!enabled) return;
+
         for (auto it = scene->sprites.rbegin(); it != scene->sprites.rend(); it++)
         {
             auto sprite = *it;

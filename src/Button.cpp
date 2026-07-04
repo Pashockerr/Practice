@@ -12,7 +12,7 @@ namespace engine
         }
     
     bool Button::IsClicked(){
-        return MouseCollides() && IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
+        return MouseCollides() && IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && animation_timer <= 0;
     }
 
     void Button::Tick(Scene *scene){
