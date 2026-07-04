@@ -8,6 +8,12 @@ namespace engine{
     Vector2 drag_offset;
 
     void handle_mouse(Scene *scene){
+        if(dragging_sprite_p != nullptr && !dragging_sprite_p->draggable){
+            dragging_sprite_p->is_being_dragged = false;
+            dragging_sprite_p = nullptr;
+            return;
+        }
+
         if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
             if(dragging_sprite_p == nullptr){
                 for(auto it = scene->sprites.rbegin(); it != scene->sprites.rend(); ++it){
@@ -17,15 +23,25 @@ namespace engine{
                     if(CheckCollisionPointRec(GetMousePosition(), sprite_p->GetRectangle())){
                         if(dragging_sprite_p == nullptr)
                             dragging_sprite_p = sprite_p;
+                            dragging_sprite_p->layer = 3;
+                            scene->QueueReorder();
                             continue;
                         if(dragging_sprite_p != nullptr && sprite_p->layer >= dragging_sprite_p->layer)
                             dragging_sprite_p = sprite_p;
                     }
                 }
             }
+            if(dragging_sprite_p != nullptr){
+                dragging_sprite_p->is_being_dragged = true;
+            }
         }
         if(IsMouseButtonUp(MOUSE_BUTTON_LEFT)){
-            dragging_sprite_p = nullptr;
+            if(dragging_sprite_p != nullptr){
+                dragging_sprite_p->layer = 2;
+                dragging_sprite_p->is_being_dragged = false;
+                dragging_sprite_p = nullptr;
+                scene->QueueReorder();
+            }
         }
 
         if(dragging_sprite_p != nullptr && dragging_sprite_p->draggable){

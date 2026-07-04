@@ -3,16 +3,12 @@
 #include "Banknote.h"
 #include "Reciever.h"
 #include "mouse_handler.h"
+#include "constants.h"
 
 int main(void)
 {
-    const int screenWidth = 1280;
-    const int screenHeight = 720;
-
-    engine::Scene scene(screenWidth, screenHeight, 61, "TEST");
-
+    engine::Scene scene(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, 60, "Gas station");
     scene.Loop();
-
     return 0;
 }
 

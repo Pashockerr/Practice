@@ -2,6 +2,16 @@
 #include <string>
 #include "../include/raylib.h"
 
+/*
+    Layers: 
+    -1 - inactive
+    0 - background, obeyed banknotes
+    1 - helper sprites
+    2 - buttons, interface, inactive draggables
+    3 - active draggables
+*/
+
+
 namespace engine
 {
     class Scene;
@@ -22,6 +32,7 @@ namespace engine
         bool draggable;
         bool visible;
         bool MouseCollides();
+        bool is_being_dragged;
         virtual void Tick(Scene*);
 
     private:
