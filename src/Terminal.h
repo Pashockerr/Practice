@@ -11,7 +11,9 @@ namespace engine
     enum State
     {
         GASOLINE_SELECT,
+        SELECT_METHOD,
         AMOUNT_SELECT,
+        MONEY_SELECT,
         WAIT_MONEY,
         WAIT_NOZZLE,
         FILLING,
@@ -29,9 +31,11 @@ namespace engine
 
     private:
         float selected_litres;
+        float selected_money;
         float received_money;
         float price_per_liter;
         float total_litres;
+        float total_money;
         State state;
         Label *label;
         Reciever *reciever;

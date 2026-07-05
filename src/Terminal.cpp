@@ -1,4 +1,6 @@
 #include "Terminal.h"
+#include <sstream>
+#include <iomanip>
 #include <math.h>
 #include <iostream>
 #include "Scene.h"
@@ -19,6 +21,7 @@ namespace engine
     Terminal::Terminal(std::string texture_name, Vector2 pos, float rot, float scale, int layer, bool visible, Scene *scene)
         : Sprite(texture_name, pos, rot, scale, layer, false, visible)
     {
+
 
         reciever = new Reciever("resources/textures/port.png", {pos.x + RECIEVER_REL_POS.x, pos.y + RECIEVER_REL_POS.y},
                                 0, 1, 2, true);
@@ -42,11 +45,24 @@ namespace engine
 
         for (int i = 0; i < 12; i++)
         {
+            std::string text;
+            if(i < 9){
+                text = std::to_string(i + 1);
+            }
+            else if(i == 9){
+                text = "V";
+            }
+            else if (i == 10){
+                text = "0";
+            }
+            else if (i == 11){
+                text = "X";
+            }
             auto button = new engine::Button("resources/textures/button_inactive.png",
                                              "resources/textures/button_active.png",
                                              {pos.x + KEYBOARD_REL_POS.x + (i % 3) * BUTTON_SIDE + (i % 3) * KEYBOARD_MARGIN,
                                               pos.y + KEYBOARD_REL_POS.y + (float)std::floor(i / 3) * BUTTON_SIDE + (float)std::floor(i / 3) * KEYBOARD_MARGIN},
-                                             0, 1, 2, true);
+                                             0, 1, 2, true, text);
             keyboard.push_back(button);
             scene->sprites.push_front(button);
         }
@@ -68,6 +84,7 @@ namespace engine
         received_money -= (total_litres - selected_litres) * price_per_liter;
         if (received_money < 50.0f)
         {
+            received_money = 0;
             state = State::GASOLINE_SELECT;
             return;
         }
@@ -97,6 +114,7 @@ namespace engine
             reciever->AddReturnValue(50.0f);
             received_money -= 50.0f;
         }
+        received_money = 0;
         state = State::GIVE_CHANGE;
         reciever->ReturnChange();
     }
@@ -128,30 +146,13 @@ namespace engine
         }
 
         reciever->enabled = state == State::WAIT_MONEY;
-        // Can't do anything if nozzle is not in place
-        if (state == State::GASOLINE_SELECT || state == State::AMOUNT_SELECT || state == State::WAIT_MONEY)
-        {
-            if (!nozzle_92->visible || !nozzle_95->visible)
-            {
-                state = State::WAIT_NOZZLE;
-            }
-        }
+
         // Wait for nozzle to be returned
         if (state == State::WAIT_NOZZLE)
         {
             if (nozzle_92->visible && nozzle_95->visible)
             {
-                if (!reciever->values.empty())
-                {
-                    state = State::WAIT_MONEY;
-                }
-                else if(selected_litres > 0){
-                    state = State::AMOUNT_SELECT;
-                }
-                else
-                {
-                    ComputeAndGiveChange(); // If no change then just goes to first menu
-                }
+                ComputeAndGiveChange();
             }
         }
 
@@ -168,6 +169,7 @@ namespace engine
             }
             if (received_money >= selected_litres * price_per_liter)
             {
+                total_money = received_money;
                 state = State::PAUSE_FILLING;
             }
         }
@@ -216,11 +218,29 @@ namespace engine
                     if (key_code == 0 || key_code == 1)
                     {
                         price_per_liter = key_code ? constants::PRICE_95 : constants::PRICE_92;
-                        state = State::AMOUNT_SELECT;
-
-                        total_litres = 0.0f;
-                        selected_litres = 0.0f;
+                        state = State::SELECT_METHOD;
                     }
+                }
+                // Method select
+                else if (state == State::SELECT_METHOD)
+                {
+                    if (key_code == 0)
+                    {
+                        state = State::MONEY_SELECT;
+                    }
+                    else if (key_code == 1)
+                    {
+                        state = State::AMOUNT_SELECT;
+                    }
+                    else if (key_code == 11)
+                    {
+                        state = State::GASOLINE_SELECT;
+                    }
+
+                    total_litres = 0.0f;
+                    selected_litres = 0.0f;
+                    selected_money = 0.0f;
+                    total_money = 0.0f;
                 }
                 // Amount select
                 else if (state == State::AMOUNT_SELECT)
@@ -247,6 +267,32 @@ namespace engine
                         }
                     }
                 }
+                // Money select
+                else if (state == State::MONEY_SELECT)
+                {
+                    if (key_code >= 0 && key_code < 9 || key_code == 10)
+                    {
+                        selected_money *= 10;
+                        selected_money += key_code == 10 ? 0 : (key_code + 1) % 10;
+                    }
+                    if (key_code == 9 && selected_money > 0)
+                    {
+                        selected_litres = selected_money / price_per_liter;
+                        total_litres = selected_litres;
+                        state = State::WAIT_MONEY;
+                    }
+                    if (key_code == 11)
+                    {
+                        if (selected_money == 0)
+                        {
+                            state = State::GASOLINE_SELECT;
+                        }
+                        else
+                        {
+                            selected_money = 0;
+                        }
+                    }
+                }
                 // Start waiting nozzle when enough money recieved and button pressed
                 else if (state == State::WAIT_MONEY)
                 {
@@ -269,8 +315,16 @@ namespace engine
                     }
                 }
             }
+
             key_code++;
         }
+    }
+
+    std::string float_to_string(float num)
+    {
+        std::ostringstream out;
+        out << std::fixed << std::setprecision(2) << num;
+        return out.str();
     }
 
     void Terminal::Draw()
@@ -280,23 +334,29 @@ namespace engine
         switch (state)
         {
         case State::GASOLINE_SELECT:
-            label->text = "Select gasoline: \n1 - 92   2 - 95";
+            label->text = "Выберите бензин: \n1 - 92   2 - 95";
+            break;
+        case State::SELECT_METHOD:
+            label->text = "Выберите метод: \n1 - сумма   2 - объём";
             break;
         case State::AMOUNT_SELECT:
-            label->text = "Input litres: \n" + std::to_string(selected_litres);
+            label->text = "Введите объём: \n" + float_to_string(selected_litres) + "Л\n" + float_to_string(selected_litres * price_per_liter) + "РУБ";
+            break;
+        case State::MONEY_SELECT:
+            label->text = "Введите сумму: \n" + float_to_string(selected_money) + "РУБ\n" + float_to_string(selected_money / price_per_liter) + "Л";
             break;
         case State::WAIT_MONEY:
-            label->text = "Insert money: \n" + std::to_string(received_money) + "/" + std::to_string(selected_litres * price_per_liter);
+            label->text = "Внесите деньги: \n" + float_to_string(received_money) + "/" + float_to_string(selected_litres * price_per_liter);
             break;
         case State::FILLING:
         case State::PAUSE_FILLING:
-            label->text = "Filling...\n" + std::to_string(total_litres - selected_litres) + "/" + std::to_string(total_litres);
+            label->text = "Заправка...\n" + float_to_string(total_litres - selected_litres) + "/" + float_to_string(total_litres) + "\n" + float_to_string(total_litres * price_per_liter - selected_litres * price_per_liter) + "/" + float_to_string(total_litres * price_per_liter) + "/" + float_to_string(total_money);
             break;
         case State::WAIT_NOZZLE:
-            label->text = "Return nozzle";
+            label->text = "Верните пистолет";
             break;
         case State::GIVE_CHANGE:
-            label->text = "Take change";
+            label->text = "Возьмите сдачу";
             break;
         default:
             label->text = "";

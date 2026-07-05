@@ -11,5 +11,6 @@ namespace engine{
             void SetFontSize(int);
         private:
             int font_size;
+            Font font;
     };
 }
